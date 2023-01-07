@@ -43,11 +43,8 @@ VALUES('Shiwani Shah','Putalisadak','Kathmandu'),
      ('Shiva Pokharel','LakeSide','Pokharel');
      
     
-     
-     
 INSERT INTO works (employee_name,company_name,salary)
-VALUES
-	  ('Shiwani Shah','First Bank Corporation',40000),
+VALUES('Shiwani Shah','First Bank Corporation',40000),
 	 ('John Smith','Small Bank Corporation',70000 ),
      ('Wednesday Adam','Second Bank Corporation',10000),
      ('Jane Doe','Javra',20000),
@@ -91,6 +88,13 @@ FROM works
 WHERE 
 company_name ='First Bank Corporation';
 
+-- using join
+SELECT w.employee_name
+FROM works w
+INNER JOIN company c ON w.company_name = c.company_name
+WHERE c.company_name = 'First Bank Corporation';
+
+
 /*(b) Find the names and cities of residence of all employees who work for First Bank Corporation.*/
 
 SELECT employee_name,city
@@ -99,6 +103,13 @@ WHERE employee_name
 IN (SELECT employee_name 
 FROM works 
 WHERE company_name ='First Bank Corporation');
+
+-- using join 
+SELECT w.employee_name, e.city
+FROM works w
+INNER JOIN employee e ON w.employee_name = e.employee_name
+INNER JOIN company c ON w.company_name = c.company_name
+WHERE c.company_name = 'First Bank Corporation';
 
 /*Find the names, street addresses, and cities of residence of all employees who work for
 First Bank Corporation and earn more than $10,000.*/
@@ -109,6 +120,13 @@ WHERE employee_name
 IN (SELECT employee_name 
 FROM works 
 WHERE company_name='First Bank Corporation' AND salary > 10000);
+
+-- using join
+SELECT w.employee_name, e.street, e.city
+FROM works w
+INNER JOIN employee e ON w.employee_name = e.employee_name
+INNER JOIN company c ON w.company_name = c.company_name
+WHERE c.company_name = 'First Bank Corporation' AND w.salary > 10000;
 
 /*(d) Find all employees in the database who live in the same cities as the companies for
 which they work.*/
@@ -124,6 +142,14 @@ WHERE city = (
     WHERE employee_name = employee.employee_name
   )
 );
+
+-- using join
+SELECT w.employee_name
+FROM works w
+INNER JOIN employee e ON w.employee_name = e.employee_name
+INNER JOIN company c ON w.company_name = c.company_name
+WHERE e.city = c.city;
+
 
 /*(e) Find all employees in the database who live in the same cities and on the same streets
 as do their managers.*/
@@ -147,7 +173,6 @@ WHERE city = (
     WHERE employee_name = e.employee_name
   )
 );
-
 
 /*(f) Find all employees in the database who do not work for First Bank Corporation*/
 
@@ -329,66 +354,13 @@ SET salary = CASE
             END
 WHERE employee_name IN (SELECT manager_name FROM manages WHERE company_name = 'First Bank Corporation');
 
-
 /*(e) Delete all tuples in the works relation for employees of Small Bank Corporation.*/
 
 DELETE FROM works
 WHERE company_name = 'Small Bank Corporation';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-- using join
+DELETE w
+FROM works w
+INNER JOIN company c ON w.company_name = c.company_name
+WHERE c.company_name = 'Small Bank Corporation';
